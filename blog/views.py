@@ -5,7 +5,7 @@ from .forms import PostForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm, CommentForm
-from .models import Post, Comment
+from .models import Post, Comment, PostCd
 from django.utils.timezone import localdate
 from datetime import datetime
 from events.models import Event
@@ -88,4 +88,15 @@ def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('post_list')
+
+def post_cad(request):
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request, 'blog/post_cad.html', {'posts': posts})
+
+def post_ncad(request):
+    form = PostCd()
+    return render(request, 'blog/post_ncad.html', {'form': form})
+
+
+
 
